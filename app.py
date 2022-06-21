@@ -9,9 +9,11 @@ app = Flask(__name__)
 class User:
 
     # Конструктор
-    def __init__(self, username, activity_status = ""):
+    def __init__(self, username, activity_status = "", followers = "", posts = ""):
         self.username = username
         self.activity_status = activity_status
+        self.followers = followers
+        self.posts = posts
 
     # Функция конвертирования в json
     def toJSON(self):
@@ -55,6 +57,13 @@ def get_tasks(id):
 
     # Статус активности
     result.activity_status = find(html, '<span class="pp_last_activity_text">', '<')
+
+    # Количество подписчиков
+    result.followers = find(html, 'le="nonzero"/></g></g></g></svg></div></div><div class="OwnerInfo__rowCenter">', ' ')
+    
+    # Количество записей
+    result.posts = find(html, 'class="slim_header slim_header_block_top">', ' ')
+    
     
     return result.toJSON()
 
