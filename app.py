@@ -49,11 +49,11 @@ def get_tasks(id):
 
     # Проверка на существование пользователя
     if html.find('<title>404 Not Found</title>') != -1:
-        return Error("404 Not Found").toJSON()
+        return Error("Not Found").toJSON()
 
     # Проверка на возможность обработки
     if html.find('<div class="service_msg service_msg_null">') != -1:
-        return Error("403 Access Denied").toJSON()
+        return Error("Access Denied").toJSON()
 
     # Статус активности
     result.activity_status = find(html, '<span class="pp_last_activity_text">', '<')
