@@ -9,11 +9,12 @@ app = Flask(__name__)
 class User:
 
     # Конструктор
-    def __init__(self, username, activity_status = "", followers = "", posts = ""):
+    def __init__(self, username, activity_status = "", followers = "", posts = "", birthDay = ""):
         self.username = username
         self.activity_status = activity_status
         self.followers = followers
         self.posts = posts
+        self.birthDay = birthDay
 
     # Функция конвертирования в json
     def toJSON(self):
@@ -64,6 +65,14 @@ def get_tasks(id):
     # Количество записей
     result.posts = find(html, 'class="slim_header slim_header_block_top">', ' ')
     
+    # Получение html файла страницы "Подробная информация"
+    html = requests.get('https://m.vk.com/'+id+'?act=info').text
+
+    html = html[94 +html.index( 'fill-rule="nonzero"/></g></g></g></svg></div></div><div class="OwnerInfo__rowCenter"><a href="'):]
+
+    # День рождения
+    result.birthDay = find(html, '>', '<')
+
     
     return result.toJSON()
 
