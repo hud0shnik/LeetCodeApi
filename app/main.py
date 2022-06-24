@@ -10,11 +10,12 @@ app = Flask(__name__)
 class User:
 
     # Конструктор
-    def __init__(self, username, activity_status = "", followers = "", posts = ""):
+    def __init__(self, username, activity_status = "", followers = "", posts = "", home = ""):
         self.username = username
         self.activity_status = activity_status
         self.followers = followers
         self.posts = posts
+        self.home = home
 
     # Функция конвертирования в json
     def toJSON(self):
@@ -69,13 +70,14 @@ def get_tasks(id):
     # Статус активности
     result.activity_status = find(html, '<span class="pp_last_activity_text">', '<')
 
+    # Город
+    result.home = find(html, 'id="home_outline_20__Icon-Color"', '<', 113)
+
     # Количество подписчиков
     result.followers = find(html, 'id="followers_outline_20__Icon-Color"', ' ', 106)
-    
+
     # Количество записей
     result.posts = find(html, 'class="slim_header slim_header_block_top">', ' ')
 
     return result.toJSON()
 
-if __name__ == '__main__':
-    app.run()
