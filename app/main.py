@@ -10,13 +10,11 @@ app = Flask(__name__)
 class User:
 
     # Конструктор
-    def __init__(self, username, activity_status = "", followers = "", posts = "", birthDay = "", items = []):
+    def __init__(self, username, activity_status = "", followers = "", posts = ""):
         self.username = username
         self.activity_status = activity_status
         self.followers = followers
         self.posts = posts
-        self.birthDay = birthDay
-        self.items = items
 
     # Функция конвертирования в json
     def toJSON(self):
@@ -36,10 +34,10 @@ class Error:
             sort_keys=True, indent=4, ensure_ascii=False)
 
 # Функция поиска значений
-def find(fullStr, substr, stopChar) -> str:
+def find(fullStr, substr, stopChar, add_count = 0) -> str:
     if fullStr.find(substr) == -1:
         return ''
-    fullStr = fullStr[fullStr.find(substr)+len(substr):]
+    fullStr = fullStr[fullStr.find(substr)+len(substr)+add_count:]
     return fullStr[:fullStr.find(stopChar)]
 
 # Роут /user/
@@ -52,6 +50,11 @@ def get_tasks(id):
     # Получение html файла странички
     html = requests.get('https://vk.com/'+id).text
 
+    ''' Сохранение html'ки в файл (для тестов)
+    file = open("sample.html", "w")
+    file.write(html)
+    file.close() '''
+
     # Проверка на существование пользователя
     if html.find('<title>404 Not Found</title>') != -1:
         return Error("Not Found").toJSON()
@@ -60,28 +63,18 @@ def get_tasks(id):
     if html.find('<div class="service_msg service_msg_null">') != -1:
         return Error("Access Denied").toJSON()
 
+    # Удаление символов "-"
+    html = html.replace('<span class="num_delim"> </span>', '')
+
     # Статус активности
     result.activity_status = find(html, '<span class="pp_last_activity_text">', '<')
 
     # Количество подписчиков
-    result.followers = find(html, 'le="nonzero"/></g></g></g></svg></div></div><div class="OwnerInfo__rowCenter">', ' ')
+    result.followers = find(html, 'id="followers_outline_20__Icon-Color"', ' ', 106)
     
     # Количество записей
     result.posts = find(html, 'class="slim_header slim_header_block_top">', ' ')
-    
-    # Получение html файла страницы "Подробная информация"
-    html = requests.get('https://m.vk.com/'+id+'?act=info').text
 
-    html = html[94 +html.index( 'le="nonzero"/></g></g></g></svg></div></div><div class="OwnerInfo__rowCenter"><'):]
-
-    # День рождения
-    result.birthDay = find(html, '>', '<')
-
-    html = html.replace('<span class="num_delim"> </span>', '')
-
-    result.items.append(find(html, 'class="Menu__itemTitle">', '</div></a>'))
-
-    
     return result.toJSON()
 
 if __name__ == '__main__':
