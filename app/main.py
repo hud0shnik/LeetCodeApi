@@ -10,9 +10,10 @@ app = Flask(__name__)
 class User:
 
     # Конструктор
-    def __init__(self, username, activity_status = "", 
+    def __init__(self, username, name = "", activity_status = "", 
                 followers = "", posts = "", home = "", work=""):
         self.username = username
+        self.name = name
         self.activity_status = activity_status
         self.followers = followers
         self.posts = posts
@@ -68,6 +69,9 @@ def get_tasks(id):
 
     # Удаление символов "-"
     html = html.replace('<span class="num_delim"> </span>', '')
+
+    # Имя
+    result.name = find(html, 'type="user">', '<')
 
     # Статус активности
     result.activity_status = find(html, '<span class="pp_last_activity_text">', '<')
