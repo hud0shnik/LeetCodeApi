@@ -39,7 +39,7 @@ class Error:
 
 # Функция поиска значений
 def find(fullStr, substr, stopChar, add_count = 0) -> str:
-    if fullStr.find(substr) == -1:
+    if substr in fullStr:
         return ''
     fullStr = fullStr[fullStr.find(substr)+len(substr)+add_count:]
     return fullStr[:fullStr.find(stopChar)]
@@ -54,17 +54,17 @@ def get_tasks(id):
     # Получение html файла странички
     html = requests.get('https://vk.com/'+id).text
 
-    ''' Сохранение html'ки в файл (для тестов)
+    '''# Сохранение html'ки в файл (для тестов)
     file = open("sample.html", "w")
     file.write(html)
     file.close() '''
 
     # Проверка на существование пользователя
-    if html.find('<title>404 Not Found</title>') != -1:
+    if '<title>404 Not Found</title>' in html:
         return Error("Not Found").toJSON()
 
     # Проверка на возможность обработки
-    if html.find('<div class="service_msg service_msg_null">') != -1:
+    if '<div class="service_msg service_msg_null">' in html:
         return Error("Access Denied").toJSON()
 
     # Удаление символов "-"
