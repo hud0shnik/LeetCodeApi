@@ -40,9 +40,10 @@ class Error:
 # Функция поиска значений
 def find(fullStr, substr, stopChar, add_count = 0) -> str:
     if substr in fullStr:
-        return ''
-    fullStr = fullStr[fullStr.find(substr)+len(substr)+add_count:]
-    return fullStr[:fullStr.find(stopChar)]
+        fullStr = fullStr[fullStr.find(substr)+len(substr)+add_count:]
+        return fullStr[:fullStr.find(stopChar)]
+    return ''
+    
 
 # Роут /user/
 @app.route('/user/<string:id>', methods=['GET'])
