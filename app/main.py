@@ -10,9 +10,10 @@ app = Flask(__name__)
 class User:
 
     # Конструктор
-    def __init__(self, username, name = "", activity_status = "", 
+    def __init__(self, username, name = "",profile_picture="", activity_status = "", 
                 followers = "", posts = "", home = "", work="", music=""):
         self.username = username
+        self.profile_picture = profile_picture
         self.name = name
         self.activity_status = activity_status
         self.followers = followers
@@ -71,6 +72,9 @@ def get_tasks(id):
     # Удаление символов "-"
     html = html.replace('<span class="num_delim"> </span>', '')
 
+    # Фото профиля
+    result.profile_picture = "https://vk.com" + find(html, '<a href="', '?')
+    
     # Имя
     result.name = find(html, 'type="user">', '<')
 
