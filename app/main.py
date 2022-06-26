@@ -11,7 +11,7 @@ class User:
 
     # Конструктор
     def __init__(self, username, name = "", activity_status = "", 
-                followers = "", posts = "", home = "", work=""):
+                followers = "", posts = "", home = "", work="", music=""):
         self.username = username
         self.name = name
         self.activity_status = activity_status
@@ -55,7 +55,7 @@ def get_tasks(id):
     # Получение html файла странички
     html = requests.get('https://vk.com/'+id).text
 
-    '''# Сохранение html'ки в файл (для тестов)
+    ''' # Сохранение html'ки в файл (для тестов)
     file = open("sample.html", "w")
     file.write(html)
     file.close() '''
@@ -88,6 +88,9 @@ def get_tasks(id):
 
     # Количество записей
     result.posts = find(html, 'class="slim_header slim_header_block_top">', ' ')
+    
+    # Количество аудиозаписей
+    result.music = find(html, '<div class="audioPlaylistSnippet__count">', ' ')
 
     return result.toJSON()
 
