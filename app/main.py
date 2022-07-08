@@ -11,7 +11,7 @@ class User:
 
     # Конструктор
     def __init__(self, username, name = "",profile_picture="", activity_status = "", 
-                followers = "", posts = "", home = "", work="", music=""):
+                followers = "", posts = "", home = "", work="", music="", id=""):
         self.username = username
         self.profile_picture = profile_picture
         self.name = name
@@ -20,6 +20,7 @@ class User:
         self.posts = posts
         self.home = home
         self.work = work
+        self.id = id
 
     # Функция конвертирования в json
     def toJSON(self):
@@ -95,6 +96,9 @@ def get_tasks(id):
     
     # Количество аудиозаписей
     result.music = find(html, '<div class="audioPlaylistSnippet__count">', ' ')
+
+    # Айди пользователя
+    result.id = result.profile_picture[20:result.profile_picture.find("_")]
 
     return result.toJSON()
 
