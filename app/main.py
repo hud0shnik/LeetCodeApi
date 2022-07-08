@@ -6,12 +6,14 @@ import requests
 
 app = Flask(__name__)
 
+
 # Пользователь
 class User:
 
     # Конструктор
-    def __init__(self, username, name = "",profile_picture="", activity_status = "", 
-                followers = "", posts = "", home = "", work="", music="", id=""):
+    def __init__(self, username, name="", profile_picture="",
+                 activity_status="", followers="", posts="",
+                 home="", work="", music="", id=""):
         self.username = username
         self.profile_picture = profile_picture
         self.name = name
@@ -24,28 +26,30 @@ class User:
 
     # Функция конвертирования в json
     def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, 
-            sort_keys=True, indent=4, ensure_ascii=False)
+        return json.dumps(self, default=lambda o: o.__dict__,
+                          sort_keys=True, indent=4, ensure_ascii=False)
+
 
 # Ошибка
 class Error:
-    
+
     # Конструктор
     def __init__(self, title):
         self.title = title
 
     # Функция конвертирования в json
     def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, 
-            sort_keys=True, indent=4, ensure_ascii=False)
+        return json.dumps(self, default=lambda o: o.__dict__,
+                          sort_keys=True, indent=4, ensure_ascii=False)
+
 
 # Функция поиска значений
-def find(fullStr, substr, stopChar, add_count = 0) -> str:
+def find(fullStr, substr, stopChar, add_count=0) -> str:
     if substr in fullStr:
         fullStr = fullStr[fullStr.find(substr)+len(substr)+add_count:]
         return fullStr[:fullStr.find(stopChar)]
     return ''
-    
+
 
 # Роут /user/
 @app.route('/user/<string:id>', methods=['GET'])
@@ -75,7 +79,7 @@ def get_tasks(id):
 
     # Фото профиля
     result.profile_picture = "https://vk.com" + find(html, '<a href="', '?')
-    
+
     # Имя
     result.name = find(html, 'type="user">', '<')
 
@@ -93,7 +97,7 @@ def get_tasks(id):
 
     # Количество записей
     result.posts = find(html, 'class="slim_header slim_header_block_top">', ' ')
-    
+
     # Количество аудиозаписей
     result.music = find(html, '<div class="audioPlaylistSnippet__count">', ' ')
 
@@ -101,4 +105,3 @@ def get_tasks(id):
     result.id = result.profile_picture[20:result.profile_picture.find("_")]
 
     return result.toJSON()
-
