@@ -13,3 +13,6 @@
 <img src="https://img.icons8.com/color/48/000000/vk-circled.png" alt="hud0shnik" height="40" width="40"/></a> 
 <!-- Heroku -->
 <a href="https://www.heroku.com/" target="_blank"><img src="https://img.icons8.com/color/48/000000/heroku.png" alt="heroku" width="40" height="40"/></a>
+
+<h3 align="left">📄 О самом проекте:</h3>
+Моя первая апиха полностью на Python. Выдаёт статистику профиля ВК (если он не закрыт).
